@@ -1,0 +1,26 @@
+void Display  (uint16_t valor,  uint8_t dsp)  
+{
+          uint8_t i ;  uint8_t auxDisplay[DIGITOS/2]; 
+
+      for(i = 0 ; i<DIGITOS/2 ; i++ )
+	   {
+		auxDisplay[i] = Tabla_Digitos_BCD_7seg [valor%10];
+		valor /= 10;
+	   }  
+
+      switch(dsp)  {
+            case DSP_ROJO:   //dsp = 0
+  				     
+		   	msgDisplay[ 2 ] = auxDisplay[ 2 ]; 
+		   	msgDisplay[ 1 ] = auxDisplay[ 1 ]; 
+		   	msgDisplay[ 0 ] = auxDisplay[ 0 ];  
+			break;
+ 
+             case DSP_VERDE:   //dsp = 1
+ 				     
+		   	msgDisplay[ 5 ] = auxDisplay[ 2];  
+		   	msgDisplay[ 4 ] = auxDisplay[ 1 ];  
+		   	msgDisplay[ 3 ] = auxDisplay[ 0 ]; 
+			break;
+      }
+}
