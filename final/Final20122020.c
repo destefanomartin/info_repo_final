@@ -7,6 +7,19 @@ uint8_t room = -1, control = -1, accion = -1;
 uint32_t Timer_Temperatura = TIMER5MIN; 
 uint16_t Temp_Set = 16; 
 uint8_t Tecla_aux, tecla_confirm, ContadoTecla = 0; 
+uint8_t intensity = 0; 
+
+
+
+int main (void)
+{
+    InicializarHW(); 
+    while(1)
+    {
+        MaqEstadoPrincipal(); 
+        ControlTemperatura(); 
+    }
+}
 
 
 enum ESTADO {REPOSO, CONTROL, LUZ, CLIMA}; 
@@ -64,9 +77,11 @@ void MaqEstadoPrincipal()
             if(intensity > 0)
             {   
                 intensity--; 
+                
                 EnviarTrama();
             } 
         }
+        ModificarLuz(room,intensity); 
         ESTADO = REPOSO; 
         break; 
     case CLIMA: 
@@ -89,6 +104,7 @@ void MaqEstadoPrincipal()
                 EnviarTrama();
             }
         }
+        ModificarTemperatura(room, Temp_Set); 
         ESTADO = REPOSO; 
         break; 
     default:
@@ -306,5 +322,6 @@ void Systick_Handler(void)
         tecla_confirm = Tecla_aux; 
         ContadoTecla=0; 
     }
-    ContadorTecla++; 
+    ContadorTecla++;
+    Timer_Temperatura--;  
 }
