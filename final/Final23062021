@@ -1,0 +1,61 @@
+#define CANT_ESPACIOS 
+
+uint8_t cant_autos; 
+uint8_t ESTADO; 
+#define REPOSO 0 
+#define ENTRANDO 1
+#define SALIENDO 2 
+
+
+void Maq_Estado_Principal(void)
+    
+    switch (ESTADO)
+    {
+    case REPOSO: 
+    {
+        if(S2 == ON)
+            ESTADO = ENTRANDO; 
+        if(S1 == ON)
+            ESTADO = SALIENDO; 
+        break;
+    } 
+    case ENTRANDO_I:
+    {
+        if(S2 == ON && S1 == ON)
+            ESTADO = ENTRANDO_F; 
+        if(S2 == OFF && S1 == OFF)
+            ESTADO = REPOSO;
+    } 
+    case ENTRANDO_F: 
+        if(S1 == OFF && S2 == OFF) 
+        { 
+            cant_autos++;
+            ESTADO = REPOSO; 
+        }
+    case SALIENDO_I: 
+    {
+        if(S1 == ON && S2 == ON)
+        {
+            ESTADO = SALIENDO_F;
+            Buzzer_ON(); 
+
+        }
+             
+        if(S1 == OFF && S2 == OFF)
+            ESTADO = REPOSO; 
+    } // deberia poner tres estados 
+    case SALIENDO_F: 
+    {
+        if(S1 == OFF && S2 == OFF)
+        {
+            cant_autos--; 
+            timer_buzzer_ON();  // PONE EN 5 SEGUNDOS EL TIEMPO DE LA SIRENA, LUEGO DE LOS 5 SE DESACTIVA 
+            
+
+            ESTADO = REPOSO; 
+        }
+
+    }
+    default:
+        break;
+    }
